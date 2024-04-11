@@ -1,0 +1,51 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Load the data from the CSV file
+data = pd.read_csv('Real estate.csv')
+
+# Separate the target variable from the features
+X = data.drop('Y house price of unit area', axis=1)
+y = data['Y house price of unit area']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and fit the decision tree model
+dt_model = DecisionTreeRegressor(random_state=42)
+dt_model.fit(X_train, y_train)
+
+# Make predictions on the test set using the decision tree model
+dt_y_pred = dt_model.predict(X_test)
+
+# Calculate the performance metrics for the decision tree model
+dt_mse = mean_squared_error(y_test, dt_y_pred)
+dt_mae = mean_absolute_error(y_test, dt_y_pred)
+dt_rmse = np.sqrt(dt_mse)
+
+# Create and fit the random forest model
+rf_model = RandomForestRegressor(random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Make predictions on the test set using the random forest model
+rf_y_pred = rf_model.predict(X_test)
+
+# Calculate the performance metrics for the random forest model
+rf_mse = mean_squared_error(y_test, rf_y_pred)
+rf_mae = mean_absolute_error(y_test, rf_y_pred)
+rf_rmse = np.sqrt(rf_mse)
+
+# Print the performance metrics for both models
+print("Decision Tree Model:")
+print("Mean Squared Error (MSE):", dt_mse)
+print("Mean Absolute Error (MAE):", dt_mae)
+print("Root Mean Squared Error (RMSE):", dt_rmse)
+
+print("\nRandom Forest Model:")
+print("Mean Squared Error (MSE):", rf_mse)
+print("Mean Absolute Error (MAE):", rf_mae)
+print("Root Mean Squared Error (RMSE):", rf_rmse)
